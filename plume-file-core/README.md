@@ -36,25 +36,6 @@ public enum ProjectFileType implements FileType {
 }
 ```
 
-5. Schedule the file cleaning
-
-The plume file core module provides a schedule job that will clean unreferenced files.
-Unreferenced files are files that are awaiting deletion. This is specified in the file metadata module used.
-
-Scheduling unreferenced files is important to make sure deleted files (data and metadata) are correctly removed.
-
-In order to schedule it, execute in your `WebApplication` entry point:
-```java
-injector.getInstance(FileScheduledTasks.class).scheduleJobs();
-```
-
-The cleaning hour is configurable. The default value is :
-```
-file.cleaning-hour = "03:00"
-```
-
-If you need to create your own job to clean other data before, just call `fileService::deleteUnreferenced` in you job.
-
 Usage
 -----
 
@@ -83,6 +64,20 @@ However, the `deleteUnreferenced` method will delete all the files that are not 
 If the reference to the file is deleted, then the file will be deleted with this method.
 
 This way, the file metadata drives the file deletion and not the other way around
+
+### File cleaning
+
+The plume file core module has scheduled job that will clean unreferenced files.
+Unreferenced files are files that are awaiting deletion. This is specified in the file metadata module used.
+
+The scheduled job ensures that file data and metadata are properly deleted.
+
+The cleaning hour is configurable. The default value is :
+```
+file.cleaning-hour = "03:00"
+```
+
+If you need to create your own job to clean other data before, just call `fileService::deleteUnreferenced` in you job.
 
 Custom storage implementation
 -----------------------------
